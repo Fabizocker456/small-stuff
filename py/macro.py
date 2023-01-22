@@ -1,3 +1,17 @@
+# both token- and AST-based macros
+# example usage:
+# 
+# import macro, ast
+#
+# @macro("stuff", "expr")
+# def stuff_macro():
+#   return ast.Constant(value=4)
+#   import_with_macros("mymac.py")
+#
+# -- mymac.py --
+# print(mac_stuff())
+# TODO: stabilization
+
 import ast
 from os import path
 import typing

@@ -1,3 +1,6 @@
+# attempts to explain a program's bytecode
+# TODO: explain AST too
+
 import ast, dis
 import typing, types
 

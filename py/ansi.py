@@ -1,8 +1,11 @@
+# Small tool for ANSI terminal escape codes
 # example usage:
 #
-# print(f"""
+# print(f"""7
 # {esc(red + fg)}red text{no}
 # {esc(green + bg}text on green background{no)""")
+#
+# TODO: more code formats
 
 csi = "\x1b["
 fg = 30

@@ -1,3 +1,12 @@
+# A small S-expression parser.
+#
+# usage:
+# 
+# import s
+# print(s.py_to_s(("a", "b", "c")))
+#
+# TODO: locate and squish bugs
+
 se_type = str | tuple["se_type", ...]
 
 cm = {"x": 2, "u": 4, "U": 8}
@@ -53,7 +62,7 @@ def s_to_py(inp: str) -> tuple[se_type, ...]:
     raise Exception("Brackets don't close correctly")
 
 
-def escape(inp: str):
+def _escape_str(inp: str):
     c = '"'
     for i in inp:
         if i == "\n":
@@ -72,11 +81,13 @@ def escape(inp: str):
     return c + '"'
 
 
-def py_to_s(inp: se_type) -> str:
+def py_to_s(inp: se_type, /, *, indent: int | str | None = None) -> str:
     ss = []
+    if isinstance(indent, int):
+        indent = " " * indent
     for i in inp:
         if isinstance(i, tuple):
-            ss.append(py_to_s(i))
+            ss.append(py_to_s(i, indent=indent))
             continue
         assert isinstance(i, str)
         c = False
@@ -88,22 +99,16 @@ def py_to_s(inp: se_type) -> str:
         if not c:
             ss.append(i)
             continue
-        ss.append(escape(i))
-    return "(" + " ".join(ss) + ")"
-
-
-if __name__ == "__main__":
-    print(
-        s := s_to_py(
-            r"""
-(
-    (a b c) ; a comment
-    (a "a () \u002e b" c)
-    a c
-)
-"""
-        )
-    )
-
-    print(py := py_to_s(s))
-    print(s_to_py(py))
+        ss.append(_escape_str(i))
+    if indent is None:
+        return "(" + " ".join(ss) + ")"
+    else:
+        if len(ss) == 0:
+            return "()"
+        if len(ss) == 1:
+            return f"({ss[0]})"
+        ret = "("
+        for i in ss:
+            for j in i.split("\n"):
+                ret += f"\n{indent}{j}"
+        return ret + "\n)"
