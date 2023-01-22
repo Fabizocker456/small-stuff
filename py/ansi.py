@@ -1,6 +1,6 @@
 # example usage:
 #
-# print("""
+# print(f"""
 # {esc(red + fg)}red text{no}
 # {esc(green + bg}text on green background{no)""")
 
